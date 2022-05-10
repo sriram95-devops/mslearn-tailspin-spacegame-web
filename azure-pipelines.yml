@@ -37,7 +37,7 @@ steps:
   inputs:
     command: 'test'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
--
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
