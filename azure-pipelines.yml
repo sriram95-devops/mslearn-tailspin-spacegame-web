@@ -55,7 +55,10 @@ steps:
     publishTestResults: true
     projects: '**/*.Tests.csproj'
 
-
+- task: reportgenerator@5
+  inputs:
+    reports: '**/coverage.xml'
+    targetdir: 'coveragereport'
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
   inputs:
