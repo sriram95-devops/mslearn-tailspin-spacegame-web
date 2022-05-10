@@ -45,24 +45,26 @@ steps:
     arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'custom'
-    custom: 'tool'
-    arguments: 'install --global dotnet-reportgenerator-globaltool'
+
 
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests - $(buildConfiguration)'
   inputs:
-    command: 'test'
-    arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
-    publishTestResults: true
-    projects: '**/*.Tests.csproj'
+   command: 'test'
+   arguments: '--no-build --configuration $(buildConfiguration) /p:threshold=80 /p:thresholdType=line
+/p:thresholdStat=total /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./Test
+Results/Coverage/'    
+   publishTestResults: true
+   projects: '**/*.Tests.csproj'
 
-- task: CmdLine@2
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install ReportGenerator'
   inputs:
-    script: |
-     reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+   command: custom
+   custom: tool
+   arguments: 'install --global dotnet-reportgenerator-globaltool'
+- script: reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
   inputs:
