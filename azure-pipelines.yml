@@ -62,7 +62,7 @@ steps:
    command: custom
    custom: tool
    arguments: 'install --global dotnet-reportgenerator-globaltool'
-- script: reportgenerator \ -reports:./Tailspin.SpaceGame.Web.Tests/TestResults/Coverage/coverage.cobertura.xml \-targetdir:$(Build.SourcesDirectory)/CodeCoverage \-reporttypes:HtmlInline_AzurePipelines
+- script: reportgenerator \ -reports:/home/vsts/work/1/s/Tailspin.SpaceGame.Web.Tests/TestResults/Coverage/coverage.cobertura.xml \-targetdir:$(Build.SourcesDirectory)/CodeCoverage \-reporttypes:HtmlInline_AzurePipelines
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
