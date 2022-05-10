@@ -45,13 +45,6 @@ steps:
     arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Install .NET tools from local manifest'
-  inputs:
-    command: 'custom'
-    projects: '**/*.csproj'
-    custom: 'tool'
-    arguments: 'restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests - $(buildConfiguration)'
