@@ -17,21 +17,6 @@ steps:
   inputs:
     version: '$(dotnetSdkVersion)'
 
-- task: Npm@1
-  displayName: 'Run npm install'
-  inputs:
-    verbose: false
-
-- script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
-  displayName: 'Compile Sass assets'
-
-- task: gulp@1
-  displayName: 'Run gulp tasks'
-
-- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
-  displayName: 'Write build info'
-  workingDirectory: $(wwwrootDir)
-
 - task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies'
   inputs:
@@ -51,16 +36,8 @@ steps:
   displayName: 'Run unit tests - $(buildConfiguration)'
   inputs:
     command: 'test'
-    arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" '
-- script: 'dotnet tool install -g dotnet-reportgenerator-globaltool  '
-  displayName: 'Install dotnet-reportgenerator-globaltool'
-- script: 'reportgenerator -reports:$(Agent.TempDirectory)/**/*.coverage.xml -targetdir:$(build.sourcesdirectory) -reporttypes:"Cobertura"'
-  displayName: 'Executes reportgenerator'
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage from $(build.sourcesdirectory)/Cobertura.xml'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(build.sourcesdirectory)/Cobertura.xml'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+-
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
